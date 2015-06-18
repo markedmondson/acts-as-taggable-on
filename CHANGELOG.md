@@ -4,17 +4,32 @@ Each change should fall into categories that would affect whether the release is
 
 As such, a _Feature_ would map to either major or minor. A _bug fix_ to a patch.  And _misc_ is either minor or patch, the difference being kind of fuzzy for the purposes of history.  Adding tests would be patch level.
 
-### Master [changes](https://github.com/mbleigh/acts-as-taggable-on/compare/v3.4.1...master)
+### [3.5.0 / 2015-03-03](https://github.com/mbleigh/acts-as-taggable-on/compare/v3.4.4...v3.5.0)
 
-  * Breaking Changes
-  * Features
   * Fixes
-  * Performance
-  * Misc
+   * [@rikettsie Fixed collation for MySql via rake rule or config parameter](https://github.com/mbleigh/acts-as-taggable-on/pull/634)
+
+### [3.4.4 / 2015-02-11](https://github.com/mbleigh/acts-as-taggable-on/compare/v3.4.3...v3.4.4)
+
+  * Fixes
+   * [@d4rky-pl Add context constraint to find_related_* methods](https://github.com/mbleigh/acts-as-taggable-on/pull/629)
+
+
+### [3.4.3 / 2014-09-26](https://github.com/mbleigh/acts-as-taggable-on/compare/v3.4.2...v3.4.3)
+
+  * Fixes
+   * [@warp  clears column cache on reset_column_information resolves](https://github.com/mbleigh/acts-as-taggable-on/pull/621)
+
+### [3.4.2 / 2014-09-26](https://github.com/mbleigh/acts-as-taggable-on/compare/v3.4.1...v3.4.2)
+
+  * Fixes
+   	* [@stiff    fixed tagged_with :any in postgresql](https://github.com/mbleigh/acts-as-taggable-on/pull/570)
+   	* [@jerefrer fixed encoding in mysql](https://github.com/mbleigh/acts-as-taggable-on/pull/588)
+   	* [@markedmondson 	Ensure taggings context aliases are maintained when joining multiple taggables](https://github.com/mbleigh/acts-as-taggable-on/pull/589)
 
 ### [3.4.1 / 2014-09-01](https://github.com/mbleigh/acts-as-taggable-on/compare/v3.4.0...v3.4.1)
   * Fixes
-    * [@konukhov fix owned ordered taggable bug]((https://github.com/mbleigh/acts-as-taggable-on/pull/585)
+    * [@konukhov fix owned ordered taggable bug](https://github.com/mbleigh/acts-as-taggable-on/pull/585)
 
 ### [3.4.0 / 2014-08-29](https://github.com/mbleigh/acts-as-taggable-on/compare/v3.3.0...v3.4.0)
 

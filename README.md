@@ -1,4 +1,5 @@
 # ActsAsTaggableOn
+[![Gem Version](https://badge.fury.io/rb/acts-as-taggable-on.svg)](http://badge.fury.io/rb/acts-as-taggable-on)
 [![Build Status](https://secure.travis-ci.org/mbleigh/acts-as-taggable-on.png)](http://travis-ci.org/mbleigh/acts-as-taggable-on)
 [![Code Climate](https://codeclimate.com/github/mbleigh/acts-as-taggable-on.png)](https://codeclimate.com/github/mbleigh/acts-as-taggable-on)
 [![Inline docs](http://inch-ci.org/github/mbleigh/acts-as-taggable-on.png)](http://inch-ci.org/github/mbleigh/acts-as-taggable-on)
@@ -24,14 +25,14 @@ Versions 2.4.1 and up are compatible with Rails 4 too (thanks to arabonradar and
 
 Versions >= 3.x are compatible with Ruby 1.9.3+ and Rails 3 and 4.
 
-For an up-to-date roadmap, see https://github.com/mbleigh/acts-as-taggable-on/issues/milestones
+For an up-to-date roadmap, see https://github.com/mbleigh/acts-as-taggable-on/milestones
 
 ## Installation
 
 To use it, add it to your Gemfile:
 
 ```ruby
-gem 'acts-as-taggable-on'
+gem 'acts-as-taggable-on', '~> 3.4'
 ```
 
 and bundle:
@@ -55,6 +56,22 @@ Review the generated migrations then migrate :
 ```shell
 rake db:migrate
 ```
+
+#### For MySql users
+You can circumvent at any time the problem of special characters [issue 623](https://github.com/mbleigh/acts-as-taggable-on/issues/623) by setting in an initializer file:
+
+```ruby
+ActsAsTaggableOn.force_binary_collation = true
+```
+
+Or by running this rake task:
+
+```shell
+rake acts_as_taggable_on_engine:tag_names:collate_bin
+```
+
+See the Configuration section for more details, and a general note valid for older
+version of the gem.
 
 #### Upgrading
 
@@ -179,7 +196,7 @@ ActsAsTaggableOn::Tag.most_used
 ActsAsTaggableOn::Tag.least_used
 ```
 
-You can also filter the results by passing the method a limit, however the default limit is 50.
+You can also filter the results by passing the method a limit, however the default limit is 20.
 
 ```ruby
 ActsAsTaggableOn::Tag.most_used(10)
@@ -261,7 +278,7 @@ If you want to change how tags are parsed, you can define a your own implementat
 ```ruby
 class MyParser < ActsAsTaggableOn::GenericParser
   def parse
-    TagList.new.tap do |tag_list|
+    ActsAsTaggableOn::TagList.new.tap do |tag_list|
       tag_list.add @tag_list.split('|')
     end
   end
@@ -285,7 +302,7 @@ Now you can use this parser, passing it as parameter:
 Or change it globally:
 
 ```ruby
-ActsAsTaggable.default_parser = MyParser
+ActsAsTaggableOn.default_parser = MyParser
 @user = User.new(:name => "Bobby")
 @user.tag_list = "east|south"
 @user.tag_list # => ["east", "south"]
@@ -406,13 +423,28 @@ If you would like tags to be case-sensitive and not use LIKE queries for creatio
 ActsAsTaggableOn.strict_case_match = true
 ```
 
+If you would like to have an exact match covering special characters with MySql:
+
+```ruby
+ActsAsTaggableOn.force_binary_collation = true
+```
+
 If you want to change the default delimiter (it defaults to ','). You can also pass in an array of delimiters such as ([',', '|']):
 
 ```ruby
 ActsAsTaggableOn.delimiter = ','
 ```
 
-*NOTE: SQLite by default can't upcase or downcase multibyte characters, resulting in unwanted behavior. Load the SQLite ICU extension for proper handle of such characters. [See docs](http://www.sqlite.org/src/artifact?ci=trunk&filename=ext/icu/README.txt)*
+*NOTE 1: SQLite by default can't upcase or downcase multibyte characters, resulting in unwanted behavior. Load the SQLite ICU extension for proper handle of such characters. [See docs](http://www.sqlite.org/src/artifact?ci=trunk&filename=ext/icu/README.txt)*
+
+*NOTE 2: the option `force_binary_collation` is strongest than `strict_case_match` and when
+set to true, the `strict_case_match` is ignored.
+To roughly apply the `force_binary_collation` behaviour with a version of the gem <= 3.4.4, execute the following commands in the MySql console:*
+
+```shell
+USE my_wonderful_app_db;
+ALTER TABLE tags MODIFY name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_bin;
+```
 
 ## Contributors
 
